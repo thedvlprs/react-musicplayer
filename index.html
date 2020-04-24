@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="app.css" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Open+Sans:400,800"
+        />
+        <title>Music Player</title>
+    </head>
+    <body>
+        <div id="container">
+            <div id="hook"></div>
+            <h1>Play Music</h1>
+            <input type="file" id="files" name="files[]" multiple />
+        </div>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@15/dist/react.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@15/dist/react-dom.js"
+        ></script>
+        <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+        <script src="https://soulwire.github.io/sketch.js/js/sketch.min.js"></script>
+        <script src="app.js"></script>
+        <script type="text/javascript">
+            'use strict';
+            function PlayButton(props) {
+                let className = props.isMusicPlaying ? 'play active' : 'play';
+                return React.createElement('a', { href: "#", title: "Play video", onClick: props.onClick, "className": className }, null);
+            }
+            class Container extends React.Component {
+                constructor() {
+                    super();
+                    this.state = { isMusicPlaying: false };
+                }
+                handleClick() {
+                    this.setState({ isMusicPlaying: !this.state.isMusicPlaying });
+                    this.state.isMusicPlaying ? this.audio.pause() : this.audio.play();
+                };
+                render() {
+                    let status = this.state.isMusicPlaying ? 'Playing :)' : 'Not playing :(';
+
+                    return React.createElement('div', null,
+                        React.createElement('h1', { onClick: this.handleClick.bind(this) }, status),
+                        PlayButton({ isMusicPlaying: this.state.isMusicPlaying, onClick: this.handleClick.bind(this) }),
+                        React.createElement('audio', { id: "audio", ref: (audioTag) => { this.audio = audioTag } })
+                    );
+                }
+            }
+            const placeWeWantToPutComponent = document.getElementById('hook');
+            ReactDOM.render(React.createElement(Container), placeWeWantToPutComponent);
+        </script>
+    </body>
+</html>
